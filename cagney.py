@@ -86,7 +86,7 @@ class Cagney(pg.sprite.Sprite):
       if self.attackRate >= 300:
         self.attackState = True
     if self.attackState:
-      self.attack = random.randint(1,2)
+      self.attack = random.randint(1,3)
       self.attackState = False
       self.attackRate = 0
       self.idle =  False    
