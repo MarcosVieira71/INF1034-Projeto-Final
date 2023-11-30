@@ -18,13 +18,15 @@ class Player(pg.sprite.Sprite):
         "shoot": spriteList('cupheadsprites', "shoot", 3, 1),
         "run": spriteList('cupheadsprites', "run", 16, 1),
         "runshoot": spriteList('cupheadsprites', "shooting", 16, 1),
-        "death": spriteList('cupheadsprites', "death", 16, 1)
+        "death": spriteList('cupheadsprites', "death", 16, 1),
+        "hit": spriteList('cupheadsprites', "hit", 6, 1)
     }
     self.index = 0
     self.currentAction = "idle"
     self.image = self.actions[self.currentAction][self.index]
     self.currentFrame = 0
     self.animatedFrame = len(self.actions[self.currentAction]) * 2
+    self.hit = False
     self.flip = False
     self.moves = [False, False]
     self.jump = False
@@ -33,7 +35,7 @@ class Player(pg.sprite.Sprite):
     self.runshoot = False
     self.states = [
         self.flip, self.moves[0], self.moves[1], self.jump, self.shoot,
-        self.idle, self.runshoot
+        self.idle, self.runshoot, self.hit
     ]
     self.frames = 0
     self.playerTime = 0
@@ -43,8 +45,11 @@ class Player(pg.sprite.Sprite):
     self.lastCollision = 0
 
   def updateAnimationFrame(self):
+    
+    if self.hit:
+       self.currentAction = "hit"
 
-    if self.jump:
+    elif self.jump:
       self.currentAction = "jump"
 
     elif (self.moves[0] or self.moves[1]) and self.shoot:
@@ -139,15 +144,13 @@ class Player(pg.sprite.Sprite):
     if pg.sprite.spritecollideany(
         self, enemy_group) != None or pg.sprite.spritecollideany(
             self, boomerang_group) != None:
-            
+            self.hit = True
             if not self.immune():
               self.life -= 1
               self.lastCollision = pg.time.get_ticks()
-
-
-    print(self.life)
-
+    else:
+      self.hit = False
     for state in self.states:
       self.updateAnimationFrame()
-      self.invulnerable = False
+
     self.draw(screen)
