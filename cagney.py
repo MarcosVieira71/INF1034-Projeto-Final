@@ -22,8 +22,6 @@ class Cagney(pg.sprite.Sprite):
     self.index = 0
     self.currentAction = "intro"
     self.image = self.actions[self.currentAction][self.index]
-    self.currentFrame = 0
-    self.animatedFrame = len(self.actions[self.currentAction])/1.25
     self.intro = True
     self.idle = False
     self.firingObjects = False
@@ -38,7 +36,11 @@ class Cagney(pg.sprite.Sprite):
     self.attackRate = 0
     self.fireRate = 0
 
-  def updateAnimationFrame(self):
+    #Animação baseada em tempo:
+    self.animation_time = 0.15
+    self.current_time = 0
+
+  def updateAnimationFrame(self, dt):
 
     if self.death:
       self.currentAction = "death"
@@ -61,14 +63,12 @@ class Cagney(pg.sprite.Sprite):
     
     
     
-    self.currentFrame += 1
-    
-    if self.currentFrame >= self.animatedFrame:
-      self.currentFrame = 0
-      self.index = (self.index+1)
-      if self.index >= len(self.actions[self.currentAction]):
-        self.index = 0    
-      self.image = self.actions[self.currentAction][self.index]
+    self.current_time += dt
+
+    if self.current_time >= self.animation_time:
+        self.current_time = 0
+        self.index = (self.index + 1) % len(self.actions[self.currentAction])
+        self.image = self.actions[self.currentAction][self.index]
     
   
   
@@ -78,7 +78,7 @@ class Cagney(pg.sprite.Sprite):
   def draw(self, screen):
      pg.draw.rect(screen, (255,0,0), (self.rect), 2)
 
-  def update(self, screen):
+  def update(self, screen, dt):
 
 
     if not self.attackState: 
@@ -123,6 +123,6 @@ class Cagney(pg.sprite.Sprite):
       
 
     for state in self.states:
-      self.updateAnimationFrame()
+      self.updateAnimationFrame(dt)
     
     self.draw(screen)
