@@ -17,17 +17,15 @@ def load():
   cagney = Cagney(1000, 400, 200, boomerang_group) 
   cagney_group.add(cagney)
   healthPoints = 3
-  jogador = Player(100, 550, healthPoints, peashot_group) # unica variavel classe palyer
+  jogador = Player(100, 550, healthPoints, peashot_group) # unica variavel classe player
   player_group.add(jogador)
-
-
 
 def draw(screen):
   global playerTime, frames
   screen.fill((255,255,255))
   pg.draw.rect(screen,(255,0,0), (ground),2)
 
-  cagney.update(screen)
+  cagney.update(screen, clock.tick(60) / 1000)
   cagney_group.draw(screen)
   boomerang_group.draw(screen)
   boomerang_group.update()  
