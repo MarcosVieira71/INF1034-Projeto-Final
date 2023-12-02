@@ -25,7 +25,7 @@ def draw(screen):
   screen.fill((255,255,255))
   pg.draw.rect(screen,(255,0,0), (ground),2)
 
-  cagney.update(screen, clock.tick(60) / 1000)
+  cagney.update(screen)
   cagney_group.draw(screen)
   boomerang_group.draw(screen)
   boomerang_group.update()  
