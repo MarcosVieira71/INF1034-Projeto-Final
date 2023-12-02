@@ -37,7 +37,8 @@ class Cagney(pg.sprite.Sprite):
     self.attackState = False
     self.attackRate = 0
     self.fireRate = 0
-
+    self.hold = False
+    self.holdCD = 0
   def updateAnimationFrame(self):
 
     if self.death:
@@ -61,7 +62,7 @@ class Cagney(pg.sprite.Sprite):
     
     
     
-    self.currentFrame += 1
+    self.currentFrame += 7
 
     if self.currentFrame >= self.animatedFrame:
       self.currentFrame = 0
@@ -85,7 +86,7 @@ class Cagney(pg.sprite.Sprite):
       self.attackRate += 1
       if self.attackRate >= 300:
         self.attackState = True
-    if self.attackState:
+    if self.attackState and self.index == 0:
       self.attack = random.randint(1,3)
       self.attackState = False
       self.attackRate = 0
@@ -114,6 +115,18 @@ class Cagney(pg.sprite.Sprite):
         self.idle = True
 
     elif self.faceAttackHigh or self.faceAttackLow:
+     # print(self.index) 
+      if self.index == 6:
+        self.hold = True
+      if self.hold == True:
+        self.index = 6
+        self.holdCD += 1
+      if self.holdCD > 25:
+        self.hold = False
+        self.holdCD = 0
+        self.index = 7
+
+       # print(self.hold)
       if self.index == 29:
         self.faceAttackHigh, self.faceAttackLow = False, False
         self.idle = True
@@ -121,8 +134,8 @@ class Cagney(pg.sprite.Sprite):
     if self.life <= 0:
       self.death = True
       
-
-    for state in self.states:
-      self.updateAnimationFrame()
     
+    self.updateAnimationFrame()
+    
+
     self.draw(screen)
