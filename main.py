@@ -39,13 +39,16 @@ def draw(screen):
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney.update(screen)
   cagney_group.draw(screen)
+  
   boomerang_group.draw(screen)
-  boomerang_group.update()  
+  boomerang_group.update()
+
   jogador.update(screen, cagney_group, boomerang_group)
   player_group.draw(screen)
+
   peashot_group.draw(screen)
-  enemy = cagney
-  peashot_group.update(enemy, peashot_group)  #projectiles group parametro ->  speed:
+  peashot_group.update(cagney, peashot_group)  #projectiles group parametro ->  speed:
+
   if intro:
     message_group.add(ready)
     message_group.update()

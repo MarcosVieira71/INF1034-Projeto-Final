@@ -32,10 +32,10 @@ class Projectile(pg.sprite.Sprite):
     self.rect.x = self.x
     self.deltaDist = abs(self.x - self.x0)
     self.updateAnimation()
-    if self.deltaDist > 1000 or pg.sprite.spritecollideany(enemy, projectile_group) != None:
-      enemy.life -= self.damage
+    if self.deltaDist > 1000:
       self.kill()
-
-
+    if pg.sprite.spritecollideany(enemy, projectile_group) != None:
+        enemy.life -= self.damage
+        self.kill()
       
       
