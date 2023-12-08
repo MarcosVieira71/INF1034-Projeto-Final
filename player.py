@@ -110,48 +110,52 @@ class Player(pg.sprite.Sprite):
           self.intro = False
           self.idle = True
 
-      if not keys[pg.K_z]:
-        self.shoot = False
-
-      if self.jump:
-        self.rect.y -= self.speed_y
-        self.speed_y -= 1
-
-        if self.speed_y < -20:
-          self.jump = False
-          self.speed_y = 20
-
-      if keys[pg.K_d]:
-        self.flip = False
-        self.idle = False
-        self.moves[0] = True
-        self.x += self.speed_x
-        self.rect.x = self.x
-
-      elif keys[pg.K_a]:
-        self.moves[1] = True
-        self.flip = True
-        self.idle = False
-        self.x -= self.speed_x
-        self.rect.x = self.x
-
       else:
-        self.shoot = False
-        self.idle = True
-        self.moves = [False for i in range(2)]
 
-      if keys[pg.K_z]:
-        self.fireRate += 1
-        if self.fireRate == 5:
-          if self.flip:
+        if not keys[pg.K_z]:
+          self.shoot = False
+
+        if self.jump:
+          self.rect.y -= self.speed_y
+          self.y = self.rect.y
+          self.speed_y -= 1
+
+          if self.speed_y < -20:
+            self.jump = False
+            self.speed_y = 20
+
+        if keys[pg.K_d]:
+          self.flip = False
+          self.idle = False
+          self.moves[0] = True
+          self.x += self.speed_x
+          self.rect.x = self.x
+
+        elif keys[pg.K_a]:
+          self.moves[1] = True
+          self.flip = True
+          self.idle = False
+          self.x -= self.speed_x
+          self.rect.x = self.x
+
+        else:
+          self.shoot = False
+          self.idle = True
+          self.moves = [False for i in range(2)]
+
+        if keys[pg.K_z]:
+          self.fireRate += 1
+          if self.fireRate == 5:
+            if self.flip:
+              shoot = self.create_projectile()
             shoot = self.create_projectile()
-          shoot = self.create_projectile()
-          self.projectiles.add(shoot)
-          self.fireRate = 0
+            self.projectiles.add(shoot)
+            self.fireRate = 0
 
-        self.shoot = True
+          self.shoot = True
 
     else:
+      self.speed_y = 20
       self.rect.y -= self.speed_y/8
       self.y = self.rect.y
 
