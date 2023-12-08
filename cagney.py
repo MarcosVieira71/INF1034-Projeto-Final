@@ -19,6 +19,14 @@ class Cagney(pg.sprite.Sprite):
       "death": spriteList('cagneyCarnation', "Death", 12, 1.5)
     }
     
+    self.laughs = {
+        1 : pg.mixer.Sound("sfx/flower_laugh_01.wav"),
+        2 : pg.mixer.Sound("sfx/flower_laugh_02.wav"),
+        3 : pg.mixer.Sound("sfx/flower_laugh_03.wav"),
+        4 : pg.mixer.Sound("sfx/flower_laugh_04.wav"),
+        5 : pg.mixer.Sound("sfx/flower_laugh_05.wav")
+        }
+
     self.index = 0
     self.currentAction = "intro"
     self.image = self.actions[self.currentAction][self.index]
@@ -39,12 +47,21 @@ class Cagney(pg.sprite.Sprite):
     self.fireRate = 0
     self.hold = False
     self.holdCD = 0
-    
+    self.laughSound = False
+    self.deathSound = False
+    self.randomizerLaugh = 1
+    self.laughSfx = self.laughs[self.randomizerLaugh]
+    self.laughSfx.set_volume(0.3)
+
+
   def updateAnimation(self):
 
     if self.death:
       self.currentAction = "death"
-    
+      if not self.deathSound:
+        self.laughDeathSfx = pg.mixer.Sound("sfx/flower_phase2_death_scream.wav")
+        pg.mixer.Sound.play(self.laughDeathSfx)
+        self.deathSound = True
     elif self.intro:
       self.currentAction = "intro"
 
@@ -65,7 +82,8 @@ class Cagney(pg.sprite.Sprite):
     self.image = updateAnimationFrame(self, 7, "entity")
   
   def create_projectile(self):
-     return Boomerang(self.rect.x, self.rect.y+300, 10, 20, 20)
+     return Boomerang(self.rect.x, self.rect.y+300, 10)
+    
 
   def draw(self, screen):
      pg.draw.rect(screen, (255,0,0), (self.rect), 2)
@@ -73,15 +91,20 @@ class Cagney(pg.sprite.Sprite):
   def update(self, screen):
 
 
-    if not self.attackState: 
+    if not self.attackState:
+      self.laughSound = False
       self.attackRate += 1
       if self.attackRate >= 300:
         self.attackState = True
     if self.attackState and self.index == 0:
       self.attack = random.randint(1,3)
+      self.randomizerLaugh = random.randint(1,5)
       self.attackState = False
       self.attackRate = 0
       self.idle =  False    
+      if not self.laughSound: 
+        pg.mixer.Sound.play(self.laughSfx)
+        self.laughSound = True
       if self.attack == 1:
         self.faceAttackHigh = True
       elif self.attack == 2:
@@ -116,8 +139,6 @@ class Cagney(pg.sprite.Sprite):
         self.hold = False
         self.holdCD = 0
         self.index = 7
-
-       # print(self.hold)
       if self.index == 29:
         self.faceAttackHigh, self.faceAttackLow = False, False
         self.idle = True
