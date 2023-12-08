@@ -19,13 +19,15 @@ class Player(pg.sprite.Sprite):
         "run": spriteList('cupheadsprites', "run", 16, 1),
         "runshoot": spriteList('cupheadsprites', "shooting", 16, 1),
         "death": spriteList('cupheadsprites', "death", 24, 1),
-        "hit": spriteList('cupheadsprites', "hit", 6, 1)
+        "hit": spriteList('cupheadsprites', "hit", 6, 1),
+        "intro": spriteList('cupheadsprites', "intro", 28, 1)
     }
     self.index = 0
     self.currentAction = "idle"
     self.image = self.actions[self.currentAction][self.index]
     self.currentFrame = 0
     self.animatedFrame = len(self.actions[self.currentAction])*2
+    self.intro = True
     self.hit = False
     self.flip = False
     self.moves = [False, False]
@@ -40,7 +42,6 @@ class Player(pg.sprite.Sprite):
     ]
     self.frames = 0
     self.playerTime = 0
-    # self.rect = self.image.get_rect(midleft = [self.x, self.y])
     self.rect = self.image.get_rect(bottomleft=[self.x, self.y])
     self.fireRate = 0
     self.lastCollision = 0
@@ -49,6 +50,9 @@ class Player(pg.sprite.Sprite):
     
     if self.death:
       self.currentAction = "death"
+
+    elif self.intro:
+      self.currentAction = "intro"
 
     elif self.hit:
        self.currentAction = "hit"
@@ -100,6 +104,11 @@ class Player(pg.sprite.Sprite):
       self.death = True
 
     if not self.death:
+
+      if self.intro:
+        if self.index >= 27:
+          self.intro = False
+          self.idle = True
 
       if not keys[pg.K_z]:
         self.shoot = False

@@ -39,6 +39,7 @@ class Cagney(pg.sprite.Sprite):
     self.fireRate = 0
     self.hold = False
     self.holdCD = 0
+    
   def updateAnimation(self):
 
     if self.death:
