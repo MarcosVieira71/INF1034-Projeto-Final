@@ -106,7 +106,7 @@ class Cagney(pg.sprite.Sprite):
         self.idle = True
 
     elif self.faceAttackHigh or self.faceAttackLow:
-     # print(self.index) 
+      
       if self.index == 6:
         self.hold = True
       if self.hold == True:
