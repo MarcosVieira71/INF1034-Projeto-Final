@@ -49,7 +49,7 @@ class Player(pg.sprite.Sprite):
     self.introSfx = pg.mixer.Sound("sfx/player_intro_cuphead.wav")
     self.introSfx.set_volume(0.2)
     self.fireLoopSfx = pg.mixer.Sound("sfx/loopBullet.mp3")
-
+    self.fireLoopSfx.set_volume(0.3)
   def updateAnimation(self):
     
     if self.death:

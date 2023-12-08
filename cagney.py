@@ -48,14 +48,20 @@ class Cagney(pg.sprite.Sprite):
     self.hold = False
     self.holdCD = 0
     self.laughSound = False
+    self.deathSound = False
     self.randomizerLaugh = 1
     self.laughSfx = self.laughs[self.randomizerLaugh]
-    
+    self.laughSfx.set_volume(0.3)
+
+
   def updateAnimation(self):
 
     if self.death:
       self.currentAction = "death"
-    
+      if not self.deathSound:
+        self.laughDeathSfx = pg.mixer.Sound("sfx/flower_phase2_death_scream.wav")
+        pg.mixer.Sound.play(self.laughDeathSfx)
+        self.deathSound = True
     elif self.intro:
       self.currentAction = "intro"
 

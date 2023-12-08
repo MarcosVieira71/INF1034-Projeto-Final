@@ -32,6 +32,7 @@ def load():
   if not jogador.death or not enemy.death:
     pg.mixer.init()
     pg.mixer.music.load("FloralFury.mp3")
+    pg.mixer.music.set_volume(0.5)
     pg.mixer.music.play()
 
   
@@ -58,6 +59,7 @@ def update():
       message_group.draw(screen)
       if not readySound: 
         announcer1 = pg.mixer.Sound("sfx/announcerCuphead.mp3")
+        announcer1.set_volume(0.4)
         pg.mixer.Sound.play(announcer1)
         readySound = True
       if ready.index == 50:
@@ -69,11 +71,13 @@ def update():
         message_group.draw(screen)
         if not knockoutSound:
           announcer2 = pg.mixer.Sound("sfx/announcer_knockout_0004.wav")
+          announcer2.set_volume(0.4)
           pg.mixer.Sound.play(announcer2)
           knockoutSound = True
         message_group.update()
         if knockout.index == 25:
           knockout.index = 25
+          message_group.remove(knockout)
     if jogador.death:
       if not youDiedSound:
          deathsound = pg.mixer.Sound("sfx/player_death_01.wav")
