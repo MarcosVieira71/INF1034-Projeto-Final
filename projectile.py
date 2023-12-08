@@ -1,8 +1,8 @@
 import pygame as pg
-from functions import spriteList
+from functions import spriteList, updateAnimationFrame
 class Projectile(pg.sprite.Sprite):
 
-  def __init__(self, x, y, damage, speed, width, height):
+  def __init__(self, x, y, damage, speed):
     super().__init__()
     self.x = x
     self.x0 = x
@@ -21,23 +21,17 @@ class Projectile(pg.sprite.Sprite):
     self.damage = damage
     self.rect = self.image.get_rect(center=[self.x, self.y+30])
 
-  def updateAnimationFrame(self):
-    if self.deltaDist > 20:
+  def updateAnimation(self):
+    if self.deltaDist > 25:
       self.spr = self.peashotSpr
-    self.currentFrame += 1
-    if self.currentFrame >= self.animatedFrame:
-      self.currentFrame = 0
-      self.index = (self.index+1) % len(self.spr)
-      self.image = self.spr[self.index]
-      if self.speed < 0:
-        self.image = pg.transform.flip(self.image, True, False)
-
+    self.image = updateAnimationFrame(self, 1, "projectile")
+ 
     
   def update(self, enemy, projectile_group):
     self.x += self.speed
     self.rect.x = self.x
     self.deltaDist = abs(self.x - self.x0)
-    self.updateAnimationFrame()
+    self.updateAnimation()
     if self.deltaDist > 1000 or pg.sprite.spritecollideany(enemy, projectile_group) != None:
       enemy.life -= self.damage
       self.kill()

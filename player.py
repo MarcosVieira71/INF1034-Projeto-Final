@@ -1,6 +1,6 @@
 import pygame as pg
 from projectile import Projectile
-from functions import spriteList
+from functions import spriteList, updateAnimationFrame
 
 
 class Player(pg.sprite.Sprite):
@@ -25,7 +25,7 @@ class Player(pg.sprite.Sprite):
     self.currentAction = "idle"
     self.image = self.actions[self.currentAction][self.index]
     self.currentFrame = 0
-    self.animatedFrame = len(self.actions[self.currentAction]) * 2
+    self.animatedFrame = len(self.actions[self.currentAction])*2
     self.hit = False
     self.flip = False
     self.moves = [False, False]
@@ -45,7 +45,7 @@ class Player(pg.sprite.Sprite):
     self.fireRate = 0
     self.lastCollision = 0
 
-  def updateAnimationFrame(self):
+  def updateAnimation(self):
     
     if self.death:
       self.currentAction = "death"
@@ -70,15 +70,8 @@ class Player(pg.sprite.Sprite):
 
     elif self.idle:
       self.currentAction = "idle"
-
-    self.currentFrame += 1
-
-    if self.currentFrame >= self.animatedFrame:
-      self.currentFrame = 0
-      self.index = (self.index + 1) % len(self.actions[self.currentAction])
-
-      self.image = self.actions[self.currentAction][self.index]
-      if self.flip:
+    self.image = updateAnimationFrame(self, 1, "entity")
+    if self.flip:
         self.image = pg.transform.flip(self.image, True, False)
   
   def immune(self):
@@ -94,7 +87,7 @@ class Player(pg.sprite.Sprite):
     if self.currentAction == "runshoot":
       self.distYplayer += 18
     return Projectile(self.rect.x + self.distXplayer,
-                      self.rect.y + self.distYplayer, 5, self.speed, 20, 20)
+                      self.rect.y + self.distYplayer, 5, self.speed)
 
   def draw(self, screen):
     pg.draw.rect(screen, (255, 0, 0), (self.rect), 2)
@@ -165,6 +158,6 @@ class Player(pg.sprite.Sprite):
     else:
       self.hit = False
     for state in self.states:
-      self.updateAnimationFrame()
+      self.updateAnimation()
 
     self.draw(screen)

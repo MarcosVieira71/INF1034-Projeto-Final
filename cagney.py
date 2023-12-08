@@ -1,7 +1,7 @@
 import random
 import pygame as pg
 from boomerang import Boomerang
-from functions import spriteList
+from functions import spriteList, updateAnimationFrame
 
 
 class Cagney(pg.sprite.Sprite):
@@ -39,7 +39,7 @@ class Cagney(pg.sprite.Sprite):
     self.fireRate = 0
     self.hold = False
     self.holdCD = 0
-  def updateAnimationFrame(self):
+  def updateAnimation(self):
 
     if self.death:
       self.currentAction = "death"
@@ -61,17 +61,7 @@ class Cagney(pg.sprite.Sprite):
     
     
     
-    
-    self.currentFrame += 7
-
-    if self.currentFrame >= self.animatedFrame:
-      self.currentFrame = 0
-      self.index = (self.index+1)
-      if self.index >= len(self.actions[self.currentAction]):
-        self.index = 0    
-      self.image = self.actions[self.currentAction][self.index]
-    
-  
+    self.image = updateAnimationFrame(self, 7, "entity")
   
   def create_projectile(self):
      return Boomerang(self.rect.x, self.rect.y+300, 10, 20, 20)
@@ -135,7 +125,7 @@ class Cagney(pg.sprite.Sprite):
       self.death = True
       
     
-    self.updateAnimationFrame()
+    self.updateAnimation()
     
 
     self.draw(screen)
