@@ -60,6 +60,7 @@ class Cagney(pg.sprite.Sprite):
       self.currentAction = "death"
       if not self.deathSound:
         self.laughDeathSfx = pg.mixer.Sound("sfx/flower_phase2_death_scream.wav")
+        self.laughDeathSfx.set_volume(0.3)
         pg.mixer.Sound.play(self.laughDeathSfx)
         self.deathSound = True
     elif self.intro:

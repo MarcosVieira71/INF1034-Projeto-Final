@@ -84,6 +84,7 @@ def update():
       if not youDiedSound:
          deathsound = pg.mixer.Sound("sfx/player_death_01.wav")
          pg.mixer.Sound.play(deathsound)
+         deathsound.set_volume(0.3)
          youDiedSound = True
       screen.blit(youDied, (125,200))
 
