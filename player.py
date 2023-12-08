@@ -50,6 +50,9 @@ class Player(pg.sprite.Sprite):
     self.introSfx.set_volume(0.2)
     self.fireLoopSfx = pg.mixer.Sound("sfx/loopBullet.mp3")
     self.fireLoopSfx.set_volume(0.3)
+    self.hitSound = False
+    self.hitSfx = pg.mixer.Sound("sfx/player_damage_crack_level4.wav")
+    self.hitSfx.set_volume(0.3)
   def updateAnimation(self):
     
     if self.death:
@@ -63,7 +66,10 @@ class Player(pg.sprite.Sprite):
 
     elif self.hit:
        self.currentAction = "hit"
-    
+       self.hitSound = False
+       if not self.hitSound and self.life > 0:
+         self.hitSfx.play()
+         self.hitSound = True
     elif self.jump:
       self.currentAction = "jump"
 
