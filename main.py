@@ -15,54 +15,74 @@ message_group = pg.sprite.GroupSingle()
 
 
 def load(): 
-  global ground, cagney, jogador, knockout, ready, intro, youDied
+  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound
   youDied = pg.image.load("youDied.png")
   ground = pg.Rect(0, 600, 1280, 120) 
-  cagney = Cagney(900, 510, 10, boomerang_group) 
-  cagney_group.add(cagney)
-  pg.mixer.init()
-  pg.mixer.music.load("FloralFury.mp3")
-  pg.mixer.music.play()
+  enemy = Cagney(900, 510, 100, boomerang_group) 
+  cagney_group.add(enemy)
   intro = True
   healthPoints = 3
   jogador = Player(100, 600, healthPoints, peashot_group) # unica variavel classe player
   player_group.add(jogador)
   ready = Message(-20, -50, "FightText_GetReady",51, 0.4)
   knockout = Message(0, 0, "FightText_KO", 26, 0.4)
+  knockoutSound = False
+  readySound = False
+  youDiedSound = False
+  if not jogador.death or not enemy.death:
+    pg.mixer.init()
+    pg.mixer.music.load("FloralFury.mp3")
+    pg.mixer.music.play()
 
-
-
+  
 
 def draw(screen):
   global playerTime, frames, intro
   screen.fill((255,255,0))
   pg.draw.rect(screen,(255,0,0), (ground),2)
-  cagney.update(screen)
   cagney_group.draw(screen)
   boomerang_group.draw(screen)
-  boomerang_group.update()  
-  jogador.update(screen, cagney_group, boomerang_group)
   player_group.draw(screen)
   peashot_group.draw(screen)
-  enemy = cagney
-  peashot_group.update(enemy, peashot_group)  #projectiles group parametro ->  speed:
-  if intro:
-    message_group.add(ready)
-    message_group.update()
-    message_group.draw(screen)
-    if ready.index == 50:
-       message_group.remove(ready)
-       intro = False
-       message_group.add(knockout)
+
+def update():
+    global intro, readySound, knockoutSound, youDiedSound
+    enemy.update(screen)
+    boomerang_group.update()  
+    jogador.update(screen, cagney_group, boomerang_group)
+    peashot_group.update(enemy, peashot_group)
+
+    if intro:
+      message_group.add(ready)
+      message_group.update()
+      message_group.draw(screen)
+      if not readySound: 
+        announcer1 = pg.mixer.Sound("sfx/announcerCuphead.mp3")
+        pg.mixer.Sound.play(announcer1)
+        readySound = True
+      if ready.index == 50:
+        message_group.remove(ready)
+        intro = False
+        message_group.add(knockout)
     
-  if cagney.death:
-        
+    if enemy.death: 
         message_group.draw(screen)
+        if not knockoutSound:
+          announcer2 = pg.mixer.Sound("sfx/announcer_knockout_0004.wav")
+          pg.mixer.Sound.play(announcer2)
+          knockoutSound = True
         message_group.update()
         if knockout.index == 25:
-          message_group.remove(knockout)
-  if jogador.death:
-    screen.blit(youDied, (125,200))
+          knockout.index = 25
+    if jogador.death:
+      if not youDiedSound:
+         deathsound = pg.mixer.Sound("sfx/player_death_01.wav")
+         pg.mixer.Sound.play(deathsound)
+         youDiedSound = True
+      screen.blit(youDied, (125,200))
+
+
+
 screen = pg.display.set_mode((1280, 720))
 running = True
 load()
@@ -80,6 +100,7 @@ while running:
        
   dt = clock.get_time()
   draw(screen)
+  update()
   pg.display.update()
 
 pg.quit()

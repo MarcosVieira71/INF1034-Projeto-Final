@@ -45,6 +45,10 @@ class Player(pg.sprite.Sprite):
     self.rect = self.image.get_rect(bottomleft=[self.x, self.y])
     self.fireRate = 0
     self.lastCollision = 0
+    self.introSound = False
+    self.introSfx = pg.mixer.Sound("sfx/player_intro_cuphead.wav")
+    self.introSfx.set_volume(0.2)
+    self.fireLoopSfx = pg.mixer.Sound("sfx/loopBullet.mp3")
 
   def updateAnimation(self):
     
@@ -53,6 +57,9 @@ class Player(pg.sprite.Sprite):
 
     elif self.intro:
       self.currentAction = "intro"
+      if not self.introSound:
+        pg.mixer.Channel(1).play(self.introSfx)
+        self.introSound = True
 
     elif self.hit:
        self.currentAction = "hit"
@@ -92,6 +99,7 @@ class Player(pg.sprite.Sprite):
       self.distYplayer += 18
     return Projectile(self.rect.x + self.distXplayer,
                       self.rect.y + self.distYplayer, 5, self.speed)
+
 
   def draw(self, screen):
     pg.draw.rect(screen, (255, 0, 0), (self.rect), 2)
@@ -144,14 +152,18 @@ class Player(pg.sprite.Sprite):
           self.moves = [False for i in range(2)]
 
         if keys[pg.K_z]:
+          self.bulletLoop = False
           self.fireRate += 1
           if self.fireRate == 5:
+            self.createBulletSound = False
             if self.flip:
               shoot = self.create_projectile()
             shoot = self.create_projectile()
             self.projectiles.add(shoot)
             self.fireRate = 0
-
+            if not self.bulletLoop:
+              pg.mixer.Sound.play(self.fireLoopSfx)
+              self.bulletLoop = True
           self.shoot = True
 
     else:
