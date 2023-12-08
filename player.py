@@ -152,8 +152,8 @@ class Player(pg.sprite.Sprite):
         self.shoot = True
 
     else:
-      self.y -= self.speed_y/8
-      self.rect.y = self.y
+      self.rect.y -= self.speed_y/8
+      self.y = self.rect.y
 
     self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
 
