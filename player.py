@@ -18,7 +18,7 @@ class Player(pg.sprite.Sprite):
         "shoot": spriteList('cupheadsprites', "shoot", 3, 1),
         "run": spriteList('cupheadsprites', "run", 16, 1),
         "runshoot": spriteList('cupheadsprites', "shooting", 16, 1),
-        "death": spriteList('cupheadsprites', "death", 16, 1),
+        "death": spriteList('cupheadsprites', "death", 24, 1),
         "hit": spriteList('cupheadsprites', "hit", 6, 1)
     }
     self.index = 0
@@ -33,6 +33,7 @@ class Player(pg.sprite.Sprite):
     self.shoot = False
     self.idle = True
     self.runshoot = False
+    self.death = False
     self.states = [
         self.flip, self.moves[0], self.moves[1], self.jump, self.shoot,
         self.idle, self.runshoot, self.hit
@@ -46,7 +47,10 @@ class Player(pg.sprite.Sprite):
 
   def updateAnimationFrame(self):
     
-    if self.hit:
+    if self.death:
+      self.currentAction = "death"
+
+    elif self.hit:
        self.currentAction = "hit"
 
     elif self.jump:
@@ -96,48 +100,58 @@ class Player(pg.sprite.Sprite):
     pg.draw.rect(screen, (255, 0, 0), (self.rect), 2)
 
   def update(self, screen, enemy_group, boomerang_group):
+
     keys = pg.key.get_pressed()
 
-    if not keys[pg.K_z]:
-      self.shoot = False
+    if self.life == 0:
+      self.death = True
 
-    if self.jump:
-      self.rect.y -= self.speed_y
-      self.speed_y -= 1
+    if not self.death:
 
-      if self.speed_y < -20:
-        self.jump = False
-        self.speed_y = 20
+      if not keys[pg.K_z]:
+        self.shoot = False
 
-    if keys[pg.K_d]:
-      self.flip = False
-      self.idle = False
-      self.moves[0] = True
-      self.x += self.speed_x
-      self.rect.x = self.x
+      if self.jump:
+        self.rect.y -= self.speed_y
+        self.speed_y -= 1
 
-    elif keys[pg.K_a]:
-      self.moves[1] = True
-      self.flip = True
-      self.idle = False
-      self.x -= self.speed_x
-      self.rect.x = self.x
+        if self.speed_y < -20:
+          self.jump = False
+          self.speed_y = 20
+
+      if keys[pg.K_d]:
+        self.flip = False
+        self.idle = False
+        self.moves[0] = True
+        self.x += self.speed_x
+        self.rect.x = self.x
+
+      elif keys[pg.K_a]:
+        self.moves[1] = True
+        self.flip = True
+        self.idle = False
+        self.x -= self.speed_x
+        self.rect.x = self.x
+
+      else:
+        self.shoot = False
+        self.idle = True
+        self.moves = [False for i in range(2)]
+
+      if keys[pg.K_z]:
+        self.fireRate += 1
+        if self.fireRate == 5:
+          if self.flip:
+            shoot = self.create_projectile()
+          shoot = self.create_projectile()
+          self.projectiles.add(shoot)
+          self.fireRate = 0
+
+        self.shoot = True
 
     else:
-      self.shoot = False
-      self.idle = True
-      self.moves = [False for i in range(2)]
-
-    if keys[pg.K_z]:
-      self.fireRate += 1
-      if self.fireRate == 5:
-        if self.flip:
-          shoot = self.create_projectile()
-        shoot = self.create_projectile()
-        self.projectiles.add(shoot)
-        self.fireRate = 0
-
-      self.shoot = True
+      self.y -= self.speed_y/8
+      self.rect.y = self.y
 
     self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
 
@@ -145,7 +159,7 @@ class Player(pg.sprite.Sprite):
         self, enemy_group) != None or pg.sprite.spritecollideany(
             self, boomerang_group) != None:
             self.hit = True
-            if not self.immune():
+            if not self.immune() and self.life > 0:
               self.life -= 1
               self.lastCollision = pg.time.get_ticks()
     else:
