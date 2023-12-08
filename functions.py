@@ -14,3 +14,23 @@ def spriteList(folder, filename, size, c):
     
   return listSpr
 
+def updateAnimationFrame(self, speed, type):
+    self.currentFrame += speed
+
+    if self.currentFrame >= self.animatedFrame:
+      self.currentFrame = 0
+
+      if type == "entity":
+        self.index = (self.index + 1) % len(self.actions[self.currentAction])
+        self.image = self.actions[self.currentAction][self.index]
+
+      elif type == "projectile":
+        self.index = (self.index + 1) % len(self.spr)
+        self.image = self.spr[self.index]
+        if self.speed < 0:
+          self.image = pg.transform.flip(self.image, True, False)
+      else: 
+        self.index = (self.index + 1) % len(self.spr)
+        self.image = self.spr[self.index]
+
+    return self.image
