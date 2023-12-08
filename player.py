@@ -164,8 +164,8 @@ class Player(pg.sprite.Sprite):
     if pg.sprite.spritecollideany(
         self, enemy_group) != None or pg.sprite.spritecollideany(
             self, boomerang_group) != None:
-            self.hit = True
             if not self.immune() and self.life > 0:
+              self.hit = True
               self.life -= 1
               self.lastCollision = pg.time.get_ticks()
     else:
