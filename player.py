@@ -52,7 +52,7 @@ class Player(pg.sprite.Sprite):
 
     elif self.hit:
        self.currentAction = "hit"
-
+    
     elif self.jump:
       self.currentAction = "jump"
 
