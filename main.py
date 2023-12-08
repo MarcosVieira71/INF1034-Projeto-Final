@@ -42,8 +42,10 @@ def draw(screen):
   screen.fill((255,255,0))
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
+  
   boomerang_group.draw(screen)
   player_group.draw(screen)
+
   peashot_group.draw(screen)
 
 def update():
