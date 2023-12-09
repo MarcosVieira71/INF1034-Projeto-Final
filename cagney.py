@@ -85,7 +85,7 @@ class Cagney(pg.sprite.Sprite):
     self.image = updateAnimationFrame(self, 7, "entity")
   
   def create_projectile(self):
-     return Boomerang(self.rect.x, self.rect.y+300, 10)
+     return Boomerang(self.rect.x, self.rect.y+190, 10)
     
 
   def draw(self, screen):

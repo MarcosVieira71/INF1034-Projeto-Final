@@ -28,6 +28,9 @@ class Projectile(pg.sprite.Sprite):
     self.image.blit(self.image, (self.x, self.y))
     self.rect = self.image.get_rect(center=[self.x, self.y+30])
     self.mask = pg.mask.from_surface(self.image)
+    self.sound = False
+    self.impactSound = pg.mixer.Sound("sfx/player_weapon_peashoot_ex_impact_01.wav")
+    self.impactSound.set_volume(0.3)
 
   def offset(self, mask2):
     return int(mask2.rect.x - self.rect.x), int(mask2.rect.y - self.rect.y)
@@ -49,12 +52,22 @@ class Projectile(pg.sprite.Sprite):
       self.kill()
 
     if self.collide:
-      if self.index == 2:
-        self.kill()  
+      if self.type == "bullet":
+        if self.index == 2:
+          self.kill()  
+      else:
+        pg.mixer.Sound.play(self.impactSound)
+        if self.index == 8:
+          self.kill()
 
     if self.mask.overlap(enemy.mask, self.offset(enemy)):
       enemy.life -= self.damage
       self.damage = 0
       self.collide = True
-      self.rect.y -= 10
+      if self.type == "bullet":
+        self.rect.y -= 10
+      else:
+        self.rect.x -= 15
+        self.rect.y -= 20
+      self.x = self.rect.x 
       self.y = self.rect.y
