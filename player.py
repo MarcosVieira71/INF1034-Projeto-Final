@@ -59,6 +59,8 @@ class Player(pg.sprite.Sprite):
     self.generateEx.set_volume(0.3)
     self.generateExSound = False
     self.charge = 0
+    self.mask = pg.mask.from_surface(self.image)
+
   def updateAnimation(self):
     if self.death:
       self.currentAction = "death"
@@ -101,6 +103,9 @@ class Player(pg.sprite.Sprite):
     if self.flip:
         self.image = pg.transform.flip(self.image, True, False)
   
+  def offset(self, mask2):
+    return int(mask2.rect.x - self.rect.x), int(mask2.rect.y - self.rect.y)
+  
   def immune(self):
     return self.lastCollision > pg.time.get_ticks()  - 3000
 
@@ -120,7 +125,7 @@ class Player(pg.sprite.Sprite):
   def draw(self, screen):
     pg.draw.rect(screen, (255, 0, 0), (self.rect), 2)
 
-  def update(self, screen, enemy_group, boomerang_group):
+  def update(self, screen, enemy):
 
     keys = pg.key.get_pressed()
 
@@ -208,13 +213,21 @@ class Player(pg.sprite.Sprite):
 
     self.rect = self.image.get_rect(bottomleft=self.rect.bottomleft)
 
-    if pg.sprite.spritecollideany(
-        self, enemy_group) != None or pg.sprite.spritecollideany(
-            self, boomerang_group) != None:
-            if not self.immune() and self.life > 0:
-              self.hit = True
-              self.life -= 1
-              self.lastCollision = pg.time.get_ticks()
+    if self.mask.overlap(enemy.mask, self.offset(enemy)) or (enemy.boomerang != None and self.mask.overlap(enemy.boomerang.mask, self.offset(enemy.boomerang))):
+      if not self.immune() and self.life > 0:
+        self.hit = True
+        self.life -= 1
+        self.lastCollision = pg.time.get_ticks()
+      
+
+
+    # if pg.sprite.spritecollideany(
+    #     self, enemy_group) != None or pg.sprite.spritecollideany(
+    #         self, boomerang_group) != None:
+    #         if not self.immune() and self.life > 0:
+    #           self.hit = True
+    #           self.life -= 1
+    #           self.lastCollision = pg.time.get_ticks()
     else:
       self.hit = False
     for state in self.states:

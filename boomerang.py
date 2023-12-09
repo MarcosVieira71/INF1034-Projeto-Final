@@ -21,6 +21,7 @@ class Boomerang(pg.sprite.Sprite):
     self.soundTurn = True
     self.sfx = pg.mixer.Sound("sfx/flower_boomerang_projectile.wav")
     self.sfx.set_volume(0.4)
+    self.mask = pg.mask.from_surface(self.image)
 
 
   def updateAnimationFrame(self):
