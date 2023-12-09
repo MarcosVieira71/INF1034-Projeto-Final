@@ -37,5 +37,3 @@ class Projectile(pg.sprite.Sprite):
     if pg.sprite.spritecollideany(enemy, projectile_group) != None:
         enemy.life -= self.damage
         self.kill()
-      
-      

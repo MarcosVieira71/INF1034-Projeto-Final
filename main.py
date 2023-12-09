@@ -1,7 +1,6 @@
 import pygame as pg
 from cagney import Cagney
 from player import Player
-from functions import spriteList
 from message import Message
 pg.init()
 
@@ -15,14 +14,13 @@ message_group = pg.sprite.GroupSingle()
 
 
 def load(): 
-  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound
+  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead
   youDied = pg.image.load("youDied.png")
   ground = pg.Rect(0, 600, 1280, 120) 
   enemy = Cagney(900, 510, 100, boomerang_group) 
   cagney_group.add(enemy)
   intro = True
-  healthPoints = 3
-  jogador = Player(100, 600, healthPoints, peashot_group) # unica variavel classe player
+  jogador = Player(100, 600, 3, peashot_group) # unica variavel classe player
   player_group.add(jogador)
   ready = Message(-20, -50, "FightText_GetReady",51, 0.4)
   knockout = Message(0, 0, "FightText_KO", 26, 0.4)
@@ -38,8 +36,9 @@ def load():
   
 
 def draw(screen):
-  global playerTime, frames, intro
+  global health
   screen.fill((255,255,0))
+  health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
   
@@ -47,6 +46,8 @@ def draw(screen):
   player_group.draw(screen)
 
   peashot_group.draw(screen)
+  screen.blit(health, (0,680))
+
 
 def update():
     global intro, readySound, knockoutSound, youDiedSound
