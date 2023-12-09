@@ -17,7 +17,7 @@ def load():
   global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead
   youDied = pg.image.load("youDied.png")
   ground = pg.Rect(0, 600, 1280, 120) 
-  enemy = Cagney(900, 510, 100, boomerang_group) 
+  enemy = Cagney(900, 510, 300, boomerang_group) 
   cagney_group.add(enemy)
   intro = True
   jogador = Player(100, 600, 3, peashot_group) # unica variavel classe player
@@ -41,10 +41,11 @@ def draw(screen):
   health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
-  
   boomerang_group.draw(screen)
   player_group.draw(screen)
+  #if jogador.charge>= 100:
 
+     
   peashot_group.draw(screen)
   screen.blit(health, (0,680))
 

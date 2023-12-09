@@ -143,11 +143,9 @@ class Cagney(pg.sprite.Sprite):
       if self.index == 29:
         self.faceAttackHigh, self.faceAttackLow = False, False
         self.idle = True
-
     if self.life <= 0:
       self.death = True
-      
-    
+
     self.updateAnimation()
     
 
