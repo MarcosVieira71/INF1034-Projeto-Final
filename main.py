@@ -55,7 +55,7 @@ def update():
     global intro, readySound, knockoutSound, youDiedSound
     enemy.update(screen)
     boomerang_group.update()  
-    jogador.update(screen, cagney_group, boomerang_group)
+    jogador.update(screen, enemy)
     peashot_group.update(enemy)
 
     if intro:
@@ -109,7 +109,7 @@ while running:
           jogador.jump = True
         if e.key == pg.K_q:
            load()
-                  
+
   dt = clock.get_time()
   draw(screen)
   update()
