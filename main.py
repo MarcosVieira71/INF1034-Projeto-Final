@@ -14,10 +14,12 @@ message_group = pg.sprite.GroupSingle()
 
 
 def load(): 
-  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead
+  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon
   youDied = pg.image.load("youDied.png")
+  ultIcon = pg.image.load("projectiles/ult/ult_0001.png")
+  ultIcon = pg.transform.scale(ultIcon, (50,25))
   ground = pg.Rect(0, 600, 1280, 120) 
-  enemy = Cagney(900, 510, 100, boomerang_group) 
+  enemy = Cagney(900, 510, 300, boomerang_group) 
   cagney_group.add(enemy)
   intro = True
   jogador = Player(100, 600, 3, peashot_group) # unica variavel classe player
@@ -41,10 +43,10 @@ def draw(screen):
   health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
-  
   boomerang_group.draw(screen)
   player_group.draw(screen)
-
+  for i in range(jogador.charge//100):
+     screen.blit(ultIcon, (100+50*i,680))
   peashot_group.draw(screen)
   screen.blit(health, (0,680))
 
@@ -105,7 +107,9 @@ while running:
       elif e.type == pg.KEYDOWN:
         if e.key == pg.K_SPACE:
           jogador.jump = True
-       
+        if e.key == pg.K_q:
+           load()
+                  
   dt = clock.get_time()
   draw(screen)
   update()

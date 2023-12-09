@@ -91,7 +91,7 @@ class Cagney(pg.sprite.Sprite):
      pg.draw.rect(screen, (255,0,0), (self.rect), 2)
 
   def update(self, screen):
-    print(self.life)
+    
     if not self.attackState:
       self.laughSound = False
       self.attackRate += 1
@@ -143,11 +143,9 @@ class Cagney(pg.sprite.Sprite):
       if self.index == 29:
         self.faceAttackHigh, self.faceAttackLow = False, False
         self.idle = True
-
     if self.life <= 0:
       self.death = True
-      
-    
+
     self.updateAnimation()
     
 

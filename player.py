@@ -20,7 +20,8 @@ class Player(pg.sprite.Sprite):
         "runshoot": spriteList('cupheadsprites', "shooting", 16, 1),
         "death": spriteList('cupheadsprites', "death", 24, 1),
         "hit": spriteList('cupheadsprites', "hit", 6, 1),
-        "intro": spriteList('cupheadsprites', "intro", 28, 1)
+        "intro": spriteList('cupheadsprites', "intro", 28, 1),
+        "ex" : spriteList('cupheadsprites', 'ex', 13, 1)
     }
     self.index = 0
     self.currentAction = "idle"
@@ -31,6 +32,7 @@ class Player(pg.sprite.Sprite):
     self.hit = False
     self.flip = False
     self.moves = [False, False]
+    self.ex = False
     self.jump = False
     self.shoot = False
     self.idle = True
@@ -53,8 +55,11 @@ class Player(pg.sprite.Sprite):
     self.hitSound = False
     self.hitSfx = pg.mixer.Sound("sfx/player_damage_crack_level4.wav")
     self.hitSfx.set_volume(0.3)
+    self.generateEx = pg.mixer.Sound("sfx/player_weapon_peashot_ex_0001.wav")
+    self.generateEx.set_volume(0.3)
+    self.generateExSound = False
+    self.charge = 0
   def updateAnimation(self):
-    
     if self.death:
       self.currentAction = "death"
 
@@ -70,6 +75,10 @@ class Player(pg.sprite.Sprite):
        if not self.hitSound and self.life > 0:
          self.hitSfx.play()
          self.hitSound = True
+
+    elif self.ex:
+      self.currentAction = "ex"
+
     elif self.jump:
       self.currentAction = "jump"
 
@@ -87,6 +96,7 @@ class Player(pg.sprite.Sprite):
 
     elif self.idle:
       self.currentAction = "idle"
+
     self.image = updateAnimationFrame(self, 1, "entity")
     if self.flip:
         self.image = pg.transform.flip(self.image, True, False)
@@ -94,7 +104,7 @@ class Player(pg.sprite.Sprite):
   def immune(self):
     return self.lastCollision > pg.time.get_ticks()  - 3000
 
-  def create_projectile(self):
+  def create_projectile(self, type):
     self.speed = 25
     self.distXplayer = 70
     self.distYplayer = 32
@@ -104,7 +114,7 @@ class Player(pg.sprite.Sprite):
     if self.currentAction == "runshoot":
       self.distYplayer += 18
     return Projectile(self.rect.x + self.distXplayer,
-                      self.rect.y + self.distYplayer, 5, self.speed)
+                      self.rect.y + self.distYplayer, 5, self.speed, type)
 
 
   def draw(self, screen):
@@ -125,9 +135,11 @@ class Player(pg.sprite.Sprite):
           self.idle = True
 
       else:
-
         if not keys[pg.K_z]:
           self.shoot = False
+        if not keys[pg.K_v] or self.index == 12:
+          self.ex = False
+        
 
         if self.jump:
           self.rect.y -= self.speed_y
@@ -163,14 +175,31 @@ class Player(pg.sprite.Sprite):
           if self.fireRate == 5:
             self.createBulletSound = False
             if self.flip:
-              shoot = self.create_projectile()
-            shoot = self.create_projectile()
+              shoot = self.create_projectile("bullet")
+            shoot = self.create_projectile("bullet")
             self.projectiles.add(shoot)
             self.fireRate = 0
             if not self.bulletLoop:
               pg.mixer.Sound.play(self.fireLoopSfx)
               self.bulletLoop = True
           self.shoot = True
+          if self.charge <= 500:
+            self.charge+=1
+        if keys[pg.K_v] and self.charge >= 100:
+          self.generateExSound, self.exShot = False, False
+          self.charge -= 100
+          self.ex = True
+          if not self.generateExSound:
+            pg.mixer.Sound.play(self.generateEx)
+            self.generateExSound = True
+          if not self.exShot:  
+            if self.flip:
+              shoot = self.create_projectile("ex")
+            shoot = self.create_projectile("ex")
+          self.exShot = True
+          self.projectiles.add(shoot)          
+          
+
 
     else:
       self.speed_y = 20
