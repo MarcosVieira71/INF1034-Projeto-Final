@@ -186,15 +186,17 @@ class Player(pg.sprite.Sprite):
           self.charge+=1
           print(self.charge)
         if keys[pg.K_v] and self.charge >= 100:
-          self.generateExSound = False
+          self.generateExSound, self.exShot = False, False
           self.charge -= 100
           self.ex = True
           if not self.generateExSound:
             pg.mixer.Sound.play(self.generateEx)
             self.generateExSound = True
-          if self.flip:
+          if not self.exShot:  
+            if self.flip:
+              shoot = self.create_projectile("ex")
             shoot = self.create_projectile("ex")
-          shoot = self.create_projectile("ex")
+          self.exShot = True
           self.projectiles.add(shoot)          
           
 
