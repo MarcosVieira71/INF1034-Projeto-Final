@@ -53,6 +53,7 @@ class Cagney(pg.sprite.Sprite):
     self.laughSfx = self.laughs[self.randomizerLaugh]
     self.laughSfx.set_volume(0.3)
     self.mask = pg.mask.from_surface(self.image)
+    self.boomerang = None
 
 
   def updateAnimation(self):
@@ -123,13 +124,15 @@ class Cagney(pg.sprite.Sprite):
         
     elif self.creatingObjects:
       if self.index == 22:
-        boomerang = self.create_projectile()
-        self.projectiles.add(boomerang)
+        self.boomerang = self.create_projectile()
+        self.projectiles.add(self.boomerang)
       if self.index == 28:
         self.creatingObjects = False
         self.idle = True
 
     elif self.faceAttackHigh or self.faceAttackLow:
+
+      self.mask = pg.mask.Mask((self.image.get_width(), self.image.get_height()/2), True)
       
       if self.index == 6:
         self.hold = True
