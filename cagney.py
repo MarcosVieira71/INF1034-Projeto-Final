@@ -52,6 +52,7 @@ class Cagney(pg.sprite.Sprite):
     self.randomizerLaugh = 1
     self.laughSfx = self.laughs[self.randomizerLaugh]
     self.laughSfx.set_volume(0.3)
+    self.mask = pg.mask.from_surface(self.image)
 
 
   def updateAnimation(self):
@@ -90,8 +91,7 @@ class Cagney(pg.sprite.Sprite):
      pg.draw.rect(screen, (255,0,0), (self.rect), 2)
 
   def update(self, screen):
-
-
+    
     if not self.attackState:
       self.laughSound = False
       self.attackRate += 1

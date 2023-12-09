@@ -183,8 +183,8 @@ class Player(pg.sprite.Sprite):
               pg.mixer.Sound.play(self.fireLoopSfx)
               self.bulletLoop = True
           self.shoot = True
-          self.charge+=1
-          print(self.charge)
+          if self.charge <= 500:
+            self.charge+=1
         if keys[pg.K_v] and self.charge >= 100:
           self.generateExSound, self.exShot = False, False
           self.charge -= 100
