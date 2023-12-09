@@ -2,6 +2,7 @@ import pygame as pg
 from cagney import Cagney
 from player import Player
 from message import Message
+from floor import TileMap
 pg.init()
 
 clock = pg.time.Clock()
@@ -14,32 +15,34 @@ message_group = pg.sprite.GroupSingle()
 
 
 def load(): 
-  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon
-  youDied = pg.image.load("youDied.png")
+  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon, tile_map
+  youDied = pg.image.load("miscellaneous/youDied.png")
   ultIcon = pg.image.load("projectiles/ult/ult_0001.png")
   ultIcon = pg.transform.scale(ultIcon, (50,25))
   ground = pg.Rect(0, 600, 1280, 120) 
-  enemy = Cagney(900, 510, 300, boomerang_group) 
+  tile_map = TileMap(1280, 720)
+  tile_map.load_map("map/file.txt")
+  tile_map.load_tiles()
+  enemy = Cagney(900, 550, 300, boomerang_group) 
   cagney_group.add(enemy)
   intro = True
   jogador = Player(100, 600, 3, peashot_group) # unica variavel classe player
   player_group.add(jogador)
-  ready = Message(-20, -50, "FightText_GetReady",51, 0.4)
-  knockout = Message(0, 0, "FightText_KO", 26, 0.4)
+  ready = Message(-20, -50, "messages","FightText_GetReady",51, 0.4)
+  knockout = Message(0, 0, "messages", "FightText_KO", 26, 0.4)
   knockoutSound = False
   readySound = False
   youDiedSound = False
   if not jogador.death or not enemy.death:
     pg.mixer.init()
-    pg.mixer.music.load("FloralFury.mp3")
+    pg.mixer.music.load("miscellaneous/FloralFury.mp3")
     pg.mixer.music.set_volume(0.5)
     pg.mixer.music.play()
-
-  
 
 def draw(screen):
   global health
   screen.fill((255,255,0))
+  tile_map.draw()
   health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
@@ -100,7 +103,6 @@ load()
 while running:
   clock.tick(60)
   for e in pg.event.get():
-      
       if e.type == pg.QUIT:
           running = False
           break
@@ -109,7 +111,7 @@ while running:
           jogador.jump = True
         if e.key == pg.K_q:
            load()
-                  
+       
   dt = clock.get_time()
   draw(screen)
   update()

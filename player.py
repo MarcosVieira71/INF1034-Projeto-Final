@@ -42,8 +42,6 @@ class Player(pg.sprite.Sprite):
         self.flip, self.moves[0], self.moves[1], self.jump, self.shoot,
         self.idle, self.runshoot, self.hit
     ]
-    self.frames = 0
-    self.playerTime = 0
     self.rect = self.image.get_rect(bottomleft=[self.x, self.y])
     self.fireRate = 0
     self.lastCollision = 0
@@ -174,8 +172,6 @@ class Player(pg.sprite.Sprite):
           self.fireRate += 1
           if self.fireRate == 5:
             self.createBulletSound = False
-            if self.flip:
-              shoot = self.create_projectile("bullet")
             shoot = self.create_projectile("bullet")
             self.projectiles.add(shoot)
             self.fireRate = 0
@@ -185,22 +181,17 @@ class Player(pg.sprite.Sprite):
           self.shoot = True
           if self.charge <= 500:
             self.charge+=1
+
         if keys[pg.K_v] and self.charge >= 100:
-          self.generateExSound, self.exShot = False, False
+          self.generateExSound = False
           self.charge -= 100
           self.ex = True
           if not self.generateExSound:
             pg.mixer.Sound.play(self.generateEx)
             self.generateExSound = True
-          if not self.exShot:  
-            if self.flip:
-              shoot = self.create_projectile("ex")
-            shoot = self.create_projectile("ex")
-          self.exShot = True
+          shoot = self.create_projectile("ex")
           self.projectiles.add(shoot)          
           
-
-
     else:
       self.speed_y = 20
       self.rect.y -= self.speed_y/8
