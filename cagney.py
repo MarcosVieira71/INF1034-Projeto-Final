@@ -11,12 +11,12 @@ class Cagney(pg.sprite.Sprite):
     self.life = life
     self.projectiles = projectiles_group
     self.actions =  {
-      "intro": spriteList('cagneyCarnation', "Intro", 20, 1.5),
-      "idle": spriteList('cagneyCarnation', "Idle", 46, 1.5),
-      "creatingObjects": spriteList('cagneyCarnation', "Create", 29, 1.5),
-      "faceAttackLow": spriteList('cagneyCarnation', "FA_Low", 30,  1.5),
-      "faceAttackHigh": spriteList('cagneyCarnation', "FA_High", 30, 1.5),
-      "death": spriteList('cagneyCarnation', "Death", 12, 1.5)
+      "intro": spriteList('cagneyCarnation', "Intro", 20, 1),
+      "idle": spriteList('cagneyCarnation', "Idle", 46, 1),
+      "creatingObjects": spriteList('cagneyCarnation', "Create", 29, 1),
+      "faceAttackLow": spriteList('cagneyCarnation', "FA_Low", 30,  1),
+      "faceAttackHigh": spriteList('cagneyCarnation', "FA_High", 30, 1),
+      "death": spriteList('cagneyCarnation', "Death", 12, 1)
     }
     
     self.laughs = {
@@ -94,9 +94,10 @@ class Cagney(pg.sprite.Sprite):
   def update(self, screen):
     
     if not self.attackState:
+      self.mask = pg.mask.from_surface(self.image)
       self.laughSound = False
       self.attackRate += 1
-      if self.attackRate >= 300:
+      if self.attackRate >= 150:
         self.attackState = True
     if self.attackState and self.index == 0:
       self.attack = random.randint(1,3)
@@ -123,6 +124,7 @@ class Cagney(pg.sprite.Sprite):
         self.idle = True
         
     elif self.creatingObjects:
+      self.mask = pg.mask.from_surface(self.image)
       if self.index == 22:
         self.boomerang = self.create_projectile()
         self.projectiles.add(self.boomerang)

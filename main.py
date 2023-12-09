@@ -23,7 +23,7 @@ def load():
   tile_map = TileMap(1280, 720)
   tile_map.load_map("map/file.txt")
   tile_map.load_tiles()
-  enemy = Cagney(900, 550, 300, boomerang_group) 
+  enemy = Cagney(1110, 500, 300, boomerang_group) 
   cagney_group.add(enemy)
   intro = True
   jogador = Player(100, 600, 3, peashot_group) # unica variavel classe player

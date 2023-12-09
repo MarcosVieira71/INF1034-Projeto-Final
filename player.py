@@ -9,7 +9,7 @@ class Player(pg.sprite.Sprite):
     super().__init__()
     self.x, self.y = x, y
     self.speed_x = 3
-    self.speed_y = 20
+    self.speed_y = 25
     self.life = life
     self.projectiles = projectiles_group
     self.actions = {
@@ -149,9 +149,9 @@ class Player(pg.sprite.Sprite):
           self.y = self.rect.y
           self.speed_y -= 1
 
-          if self.speed_y < -20:
+          if self.speed_y < -25:
             self.jump = False
-            self.speed_y = 20
+            self.speed_y = 25
 
         if keys[pg.K_d]:
           self.flip = False
@@ -198,7 +198,7 @@ class Player(pg.sprite.Sprite):
           self.projectiles.add(shoot)          
           
     else:
-      self.speed_y = 20
+      self.speed_y = 25
       self.rect.y -= self.speed_y/8
       self.y = self.rect.y
 
@@ -210,15 +210,6 @@ class Player(pg.sprite.Sprite):
         self.life -= 1
         self.lastCollision = pg.time.get_ticks()
       
-
-
-    # if pg.sprite.spritecollideany(
-    #     self, enemy_group) != None or pg.sprite.spritecollideany(
-    #         self, boomerang_group) != None:
-    #         if not self.immune() and self.life > 0:
-    #           self.hit = True
-    #           self.life -= 1
-    #           self.lastCollision = pg.time.get_ticks()
     else:
       self.hit = False
     for state in self.states:
