@@ -34,4 +34,3 @@ def updateAnimationFrame(self, speed, type):
         self.image = self.spr[self.index]
 
     return self.image
-
