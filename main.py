@@ -42,7 +42,7 @@ def load():
 def draw(screen):
   global health
   screen.fill((255,255,0))
-  tile_map.draw(screen, jogador)
+  tile_map.draw(screen)
   health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)

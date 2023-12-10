@@ -94,7 +94,6 @@ class Cagney(pg.sprite.Sprite):
   def update(self, screen):
     
     if not self.attackState:
-      self.mask = pg.mask.from_surface(self.image)
       self.laughSound = False
       self.attackRate += 1
       if self.attackRate >= 150:
@@ -122,6 +121,9 @@ class Cagney(pg.sprite.Sprite):
       if self.index >= 19:
         self.intro = False
         self.idle = True
+    
+    elif self.idle:
+      self.mask = pg.mask.from_surface(self.image)
         
     elif self.creatingObjects:
       self.mask = pg.mask.from_surface(self.image)
