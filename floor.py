@@ -25,13 +25,8 @@ class TileMap:
         self.tile['D'] = pg.image.load("map/D.png")
         self.tile['E'] = pg.image.load("map/E.png")
 
-    def draw(self, screen,player):
-        self.screen.fill((255, 255, 255))
+    def draw(self, screen):
         
         for i in range(12):
             for j in range(20):
                 self.screen.blit(self.tile[self.map[i][j]], ((j * 64), (i * 60)))
-
-        for rect in self.platforms:
-            screen.blit(self.platform, rect)
-            pg.draw.rect(screen, (255, 0, 0), (rect),2)

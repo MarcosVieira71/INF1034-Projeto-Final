@@ -3,6 +3,7 @@ from cagney import Cagney
 from player import Player
 from message import Message
 from floor import TileMap
+from plataforma import Platform
 pg.init()
 
 clock = pg.time.Clock()
@@ -15,11 +16,12 @@ message_group = pg.sprite.GroupSingle()
 
 
 def load(): 
-  global ground, enemy, jogador, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon, tile_map
+  global ground, enemy, jogador, platform1, platform2, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon, tile_map, background
   youDied = pg.image.load("miscellaneous/youDied.png")
   ultIcon = pg.image.load("projectiles/ult/ult_0001.png")
   ultIcon = pg.transform.scale(ultIcon, (50,25))
   ground = pg.Rect(0, 600, 1280, 120) 
+  background = pg.image.load('miscellaneous/background.png')
   tile_map = TileMap(1280, 720)
   tile_map.load_map("map/file.txt")
   tile_map.load_tiles()
@@ -28,6 +30,8 @@ def load():
   intro = True
   jogador = Player(100, 600, 3, peashot_group) 
   player_group.add(jogador)
+  platform1 = Platform(150, 275)
+  platform2 = Platform(550, 275)
   ready = Message(-20, -50, "messages","FightText_GetReady",51, 0.4)
   knockout = Message(0, 0, "messages", "FightText_KO", 26, 0.4)
   knockoutSound = False
@@ -40,14 +44,16 @@ def load():
     pg.mixer.music.play(-1)
 
 def draw(screen):
-  global health
-  screen.fill((255,255,0))
+  global health, background
+  screen.blit(background, (0, 0))
   tile_map.draw(screen)
   health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
   boomerang_group.draw(screen)
   player_group.draw(screen)
+  platform1.draw(screen)
+  platform2.draw(screen)
   for i in range(jogador.charge//100):
      screen.blit(ultIcon, (100+50*i,680))
   peashot_group.draw(screen)
@@ -101,7 +107,6 @@ running = True
 load()
 
 while running:
-  print(jogador.y)
   clock.tick(60)
   for e in pg.event.get():
       if e.type == pg.QUIT:
