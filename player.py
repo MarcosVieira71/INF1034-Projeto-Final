@@ -9,7 +9,7 @@ class Player(pg.sprite.Sprite):
     super().__init__()
     self.x, self.y = x, y
     self.speed_x = 3
-    self.speed_y = 25
+    self.speed_y = 27
     self.life = life
     self.projectiles = projectiles_group
     self.actions = {
@@ -149,9 +149,9 @@ class Player(pg.sprite.Sprite):
           self.y = self.rect.y
           self.speed_y -= 1
 
-          if self.speed_y < -25:
+          if self.speed_y < -27:
             self.jump = False
-            self.speed_y = 25
+            self.speed_y = 27
 
         if keys[pg.K_d]:
           self.flip = False
@@ -198,7 +198,7 @@ class Player(pg.sprite.Sprite):
           self.projectiles.add(shoot)          
           
     else:
-      self.speed_y = 25
+      self.speed_y = 27
       self.rect.y -= self.speed_y/8
       self.y = self.rect.y
 

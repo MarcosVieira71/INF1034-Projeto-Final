@@ -26,7 +26,7 @@ def load():
   enemy = Cagney(1110, 500, 300, boomerang_group) 
   cagney_group.add(enemy)
   intro = True
-  jogador = Player(100, 600, 3, peashot_group) # unica variavel classe player
+  jogador = Player(100, 600, 3, peashot_group) 
   player_group.add(jogador)
   ready = Message(-20, -50, "messages","FightText_GetReady",51, 0.4)
   knockout = Message(0, 0, "messages", "FightText_KO", 26, 0.4)
@@ -37,12 +37,12 @@ def load():
     pg.mixer.init()
     pg.mixer.music.load("miscellaneous/FloralFury.mp3")
     pg.mixer.music.set_volume(0.5)
-    pg.mixer.music.play()
+    pg.mixer.music.play(-1)
 
 def draw(screen):
   global health
   screen.fill((255,255,0))
-  tile_map.draw()
+  tile_map.draw(screen, jogador)
   health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
   pg.draw.rect(screen,(255,0,0), (ground),2)
   cagney_group.draw(screen)
@@ -101,6 +101,7 @@ running = True
 load()
 
 while running:
+  print(jogador.y)
   clock.tick(60)
   for e in pg.event.get():
       if e.type == pg.QUIT:

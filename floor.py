@@ -8,8 +8,7 @@ class TileMap:
         self.clock = pg.time.Clock()
         self.screen = pg.display.set_mode((width, height))
         self.platform = pg.image.load("miscellaneous/Platform_A_01.png")
-        self.platforms = [(self.platform.get_rect(topleft = [150+i*400, 300])) for i in range(2)] #append 2 retangulos da plataforma.png para ser desenhado no draw
-
+        self.platforms = [(self.platform.get_rect(topleft = [150+i*400, 275])) for i in range(2)] #append 2 retangulos da plataforma.png para ser desenhado no draw
 
     def load_map(self, filename):
         self.map = []
@@ -26,7 +25,7 @@ class TileMap:
         self.tile['D'] = pg.image.load("map/D.png")
         self.tile['E'] = pg.image.load("map/E.png")
 
-    def draw(self, screen):
+    def draw(self, screen,player):
         self.screen.fill((255, 255, 255))
         
         for i in range(12):
