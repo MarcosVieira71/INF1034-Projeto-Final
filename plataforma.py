@@ -5,6 +5,7 @@ class Platform:
         self.y = y
         self.image = pg.image.load("miscellaneous/Platform_A_01.png")
         self.rect = self.image.get_rect(topleft = [x, y])
+        self.mask = pg.mask.from_surface(self.image)
 
     def draw(self, screen):
         screen.blit(self.image, (self.x,self.y))
