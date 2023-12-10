@@ -1,10 +1,12 @@
 import pygame as pg
+from datetime import datetime
 from cagney import Cagney
 from player import Player
 from message import Message
 from floor import TileMap
 from plataforma import Platform
 from menu import Menu
+
 pg.init()
 
 clock = pg.time.Clock()
@@ -15,14 +17,21 @@ peashot_group = pg.sprite.Group()
 player_group = pg.sprite.GroupSingle()
 message_group = pg.sprite.GroupSingle()
 menu_group = pg.sprite.GroupSingle()
-
-def load(status): 
-  global ground, enemy, jogador, platform1, platform2, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon, tile_map, background, menu
+  
+def load(status, stars, time): 
+  global ground, enemy, jogador, platform1, platform2, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon, tile_map, menu, background, life
   youDied = pg.image.load("miscellaneous/youDied.png")
   ultIcon = pg.image.load("projectiles/ult/ult_0001.png")
   ultIcon = pg.transform.scale(ultIcon, (50,25))
   pg.mixer.init()
-  if status == "start":
+  if status == "win":
+     menu = Menu("win", stars, time)
+     menu_group.add(menu)
+     pg.mixer.music.load("win/victoryTunes.mp3")
+     pg.mixer.music.set_volume(0.5)
+     pg.mixer.music.play(-1)
+
+  elif status == "start":
     menu = Menu("principal", None, None)
     menu_group.add(menu)
     pg.mixer.music.load("miscellaneous/naoMexaComOCapeta.mp3")
@@ -42,7 +51,7 @@ def load(status):
     tile_map = TileMap(1280, 720)
     tile_map.load_map("map/file.txt")
     tile_map.load_tiles()
-    enemy = Cagney(1110, 500, 300, boomerang_group) 
+    enemy = Cagney(1110, 500, 100, boomerang_group) 
     cagney_group.add(enemy)
     intro = True
     jogador = Player(100, 600, 3, peashot_group) 
@@ -53,18 +62,24 @@ def load(status):
     knockout = Message(0, 0, "messages", "FightText_KO", 26, 0.4)
     knockoutSound = False
     readySound = False
-    youDiedSound = False
-    if not jogador.death or not enemy.death:
-      pg.mixer.init()
-      pg.mixer.music.load("miscellaneous/FloralFury.mp3")
-      pg.mixer.music.set_volume(0.5)
-      pg.mixer.music.play(-1)
+    youDiedSound = False 
+    pg.mixer.music.load("miscellaneous/FloralFury.mp3")
+    pg.mixer.music.set_volume(0.5)
+    pg.mixer.music.play(-1)
+    
 
-def draw(screen, status):
+
+def draw(screen,status):
   global health, background
-  if status == "start":
+
+  if status == "win":
+     menu.draw(screen)
+     menu_group.draw(screen)
+
+  elif status == "start":
       menu.draw(screen)
       menu_group.draw(screen)
+
   elif status == "tutorial":
       menu.draw(screen)
       
@@ -82,11 +97,18 @@ def draw(screen, status):
       screen.blit(ultIcon, (100+50*i,680))
     peashot_group.draw(screen)
     screen.blit(health, (0,680))
+  
+  
+
 
 
 def update(status):
     global intro, readySound, knockoutSound, youDiedSound
-    if status == "start":
+
+    if status == "win":
+      menu.update()
+
+    elif status == "start":
         menu.update()
 
     elif status == "playing":
@@ -96,6 +118,7 @@ def update(status):
       peashot_group.update(enemy)
 
       if intro:
+        
         message_group.add(ready)
         message_group.update()
         message_group.draw(screen)
@@ -120,7 +143,7 @@ def update(status):
           if knockout.index == 25:
             knockout.index = 25
             message_group.remove(knockout)
-      if jogador.death:
+      elif jogador.death:
         if not youDiedSound:
           deathsound = pg.mixer.Sound("sfx/player_death_01.wav")
           pg.mixer.Sound.play(deathsound)
@@ -132,7 +155,9 @@ def update(status):
 status = "start"
 screen = pg.display.set_mode((1280, 720))
 running = True
-load(status)
+stars = 3
+time = 0
+load(status, stars, time)
 qCount = 0
 while running:
   clock.tick(60)
@@ -146,16 +171,25 @@ while running:
         if e.key == pg.K_q:
            if qCount == 0:
               status = "tutorial"
-              qCount+=1
            elif qCount == 1:
-              status = "playing"  
-              qCount += 1
+              status = "playing"
+              time = pg.time.get_ticks()
            elif qCount == 2:
-              status = "start"
-              qCount = 0
-            
-              
-           load(status)
+              if enemy.death:
+                 timeWin = pg.time.get_ticks()
+                 time = (timeWin - time)//1000
+                 timemin = time//60
+                 timesec = time%60
+                 time = [timemin, timesec]
+                 stars = jogador.life
+                 status = "win"
+              else:
+                status = "start"  
+                qCount = 0
+           qCount+=1
+           load(status, stars, time)
+
+
   dt = clock.get_time()
   draw(screen, status)
   update(status)

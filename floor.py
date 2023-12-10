@@ -26,7 +26,6 @@ class TileMap:
         self.tile['E'] = pg.image.load("map/E.png")
 
     def draw(self, screen):
-        
         for i in range(12):
             for j in range(20):
                 self.screen.blit(self.tile[self.map[i][j]], ((j * 64), (i * 60)))
