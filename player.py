@@ -108,7 +108,7 @@ class Player(pg.sprite.Sprite):
     return self.lastCollision > pg.time.get_ticks()  - 3000
 
   def create_projectile(self, type):
-    self.speed = 25
+    self.speed = 15
     self.distXplayer = 70
     self.distYplayer = 32
     if self.flip:

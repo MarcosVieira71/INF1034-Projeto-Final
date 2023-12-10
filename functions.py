@@ -8,7 +8,7 @@ def spriteList(folder, filename, size, c):
     zeroExtra = ''
     if i+1 < 10:
       zeroExtra = '0'
-    listSpr.append(pg.image.load(f"{folder}/{filename}/{filename}_00{zeroExtra}{str(i+1)}.png"))
+    listSpr.append(pg.image.load(f"{folder}/{filename}/{filename}_00{zeroExtra}{str(i+1)}.png").convert_alpha())
       
   listSpr = [pg.transform.scale(sprite, (sprite.get_width()/c, sprite.get_height()/c)) for sprite in listSpr]
     

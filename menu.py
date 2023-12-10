@@ -13,7 +13,7 @@ class Menu(pg.sprite.Sprite):
         self.type = type
         self.time = time
         if self.type == "principal":
-            self.background = pg.image.load("title/title_screen_background.png")
+            self.background = pg.image.load("title/title_screen_background.png").convert_alpha()
             self.pressQ = self.font.render("Q PARA INICIAR", True, "black")
             self.spr = spriteList("title","cuphead_title_screen", 34, 1)
             self.image = self.spr[self.index]
@@ -21,7 +21,7 @@ class Menu(pg.sprite.Sprite):
 
         elif self.type == "tutorial":
             
-            self.background = pg.image.load("miscellaneous/backgroundMenu.png")
+            self.background = pg.image.load("miscellaneous/backgroundMenu.png").convert_alpha()
             self.background = pg.transform.scale(self.background, (1280, 720))
             self.board = pg.image.load("miscellaneous/board.png")
             self.board = pg.transform.scale(self.board,(1100,600))
@@ -36,11 +36,11 @@ class Menu(pg.sprite.Sprite):
             self.time = self.font.render(f"VOCÊ LEVOU {self.time[0]}:{self.time[1]} PARA VENCER!", True, "yellow")
             self.parabens = self.font.render("PARABÉNS!", True, "yellow")
             self.lifes = self.font.render(f"{self.stars}/3 VIDAS", True, "yellow")
-            self.background = pg.image.load("win/winscreen_bg.png")
+            self.background = pg.image.load("win/winscreen_bg.png").convert_alpha()
             self.background = pg.transform.scale(self.background, (1280,720))
-            self.board = pg.image.load("win/winscreen_board.png")
-            self.resultTitle = pg.image.load("win/resultados.png")
-            self.star = pg.image.load("win/winscreen_main_star_a.png")
+            self.board = pg.image.load("win/winscreen_board.png").convert_alpha()
+            self.resultTitle = pg.image.load("win/resultados.png").convert_alpha()
+            self.star = pg.image.load("win/winscreen_main_star_a.png").convert_alpha()
             self.star = pg.transform.scale(self.star, (50, 50))
             self.spr = spriteList("win","winscreen_ch", 7, 1)
             self.image = self.spr[self.index]
@@ -48,7 +48,7 @@ class Menu(pg.sprite.Sprite):
             
 
         self.currentFrame = 0
-        self.animatedFrame = 5
+        self.animatedFrame = 8
 
     def updateAnimation(self):
         self.image = updateAnimationFrame(self, 2, "menu")     
