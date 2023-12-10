@@ -20,8 +20,8 @@ menu_group = pg.sprite.GroupSingle()
   
 def load(status, stars, time): 
   global ground, enemy, jogador, platform1, platform2, knockout, ready, intro, youDied, readySound, youDiedSound, knockoutSound, healthDead, ultIcon, tile_map, menu, background, life
-  youDied = pg.image.load("miscellaneous/youDied.png")
-  ultIcon = pg.image.load("projectiles/ult/ult_0001.png")
+  youDied = pg.image.load("miscellaneous/youDied.png").convert_alpha()
+  ultIcon = pg.image.load("projectiles/ult/ult_0001.png").convert_alpha()
   ultIcon = pg.transform.scale(ultIcon, (50,25))
   pg.mixer.init()
   if status == "win":
@@ -47,7 +47,7 @@ def load(status, stars, time):
      
   elif status == "playing":
     ground = pg.Rect(0, 600, 1280, 120) 
-    background = pg.image.load('miscellaneous/background.png')
+    background = pg.image.load('miscellaneous/background.png').convert_alpha()
     tile_map = TileMap(1280, 720)
     tile_map.load_map("map/file.txt")
     tile_map.load_tiles()
@@ -86,7 +86,7 @@ def draw(screen,status):
   elif status == "playing":
     screen.blit(background, (0, 0))
     tile_map.draw(screen)
-    health = pg.image.load(f"miscellaneous/health{jogador.life}.png")
+    health = pg.image.load(f"miscellaneous/health{jogador.life}.png").convert()
     pg.draw.rect(screen,(255,0,0), (ground),2)
     cagney_group.draw(screen)
     boomerang_group.draw(screen)
