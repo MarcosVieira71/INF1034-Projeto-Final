@@ -39,7 +39,7 @@ class Boomerang(pg.sprite.Sprite):
        pg.mixer.Sound.play(self.sfx)
        self.sound = True
     if self.x < -200:
-      self.y += 100
+      self.y += 200
       self.rect.y = self.y
       self.speed *= -1
     self.x += self.speed

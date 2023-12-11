@@ -31,7 +31,7 @@ class Cagney(pg.sprite.Sprite):
     self.currentAction = "intro"
     self.image = self.actions[self.currentAction][self.index]
     self.currentFrame = 0
-    self.animatedFrame = len(self.actions[self.currentAction])/1.25
+    self.animatedFrame = len(self.actions[self.currentAction])*1.25
     self.intro = True
     self.idle = False
     self.firingObjects = False
@@ -135,8 +135,8 @@ class Cagney(pg.sprite.Sprite):
         self.idle = True
 
     elif self.faceAttackHigh or self.faceAttackLow:
-
-      self.mask = pg.mask.Mask((self.image.get_width(), self.image.get_height()/2), True)
+      if self.faceAttackHigh:
+        self.mask = pg.mask.Mask((self.image.get_width(), self.image.get_height()/2), True)
       
       if self.index == 6:
         self.hold = True
