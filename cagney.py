@@ -47,6 +47,9 @@ class Cagney(pg.sprite.Sprite):
     self.fireRate = 0
     self.hold = False
     self.holdCD = 0
+    self.introSound = False
+    self.introSfx = pg.mixer.Sound("sfx/flower_intro_yell.wav")
+    self.introSfx.set_volume(0.3)
     self.laughSound = False
     self.deathSound = False
     self.randomizerLaugh = 1
@@ -67,6 +70,9 @@ class Cagney(pg.sprite.Sprite):
         self.deathSound = True
     elif self.intro:
       self.currentAction = "intro"
+      if not self.introSound:
+        pg.mixer.Sound.play(self.introSfx)
+        self.introSound = True
 
     elif self.idle:
       self.currentAction = "idle"
