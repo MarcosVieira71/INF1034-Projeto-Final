@@ -97,7 +97,7 @@ class Cagney(pg.sprite.Sprite):
   def draw(self, screen):
      pg.draw.rect(screen, (255,0,0), (self.rect), 2)
 
-  def update(self, screen):
+  def update(self):
     
     if not self.attackState:
       self.laughSound = False

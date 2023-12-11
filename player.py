@@ -132,7 +132,7 @@ class Player(pg.sprite.Sprite):
   def draw(self, screen):
     pg.draw.rect(screen, (255, 0, 0), (self.rect), 2)
 
-  def update(self, screen, enemy, platform1, platform2, ground):
+  def update(self, enemy, platform1, platform2, ground):
 
     keys = pg.key.get_pressed()
 
@@ -236,7 +236,6 @@ class Player(pg.sprite.Sprite):
     if self.y >= 600 - self.image.get_height():
       self.on_ground = True
       self.rect.y = ground.y - self.image.get_height()
-      self.y = self.rect.y
     
     if self.x < 0:
       self.rect.x = 0

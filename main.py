@@ -110,9 +110,9 @@ def update(status):
         menu.update()
 
     elif status == "playing":
-      enemy.update(screen)
+      enemy.update()
       boomerang_group.update()  
-      jogador.update(screen, enemy, platform1, platform2, ground)
+      jogador.update(enemy, platform1, platform2, ground)
       peashot_group.update(enemy)
 
       if intro:
