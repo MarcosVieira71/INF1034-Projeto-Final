@@ -9,7 +9,7 @@ class Player(pg.sprite.Sprite):
     super().__init__()
     self.x, self.y = x, y
     self.speed_x = 3
-    self.speed_y = 27
+    self.speed_y = 28
     self.life = life
     self.projectiles = projectiles_group
     self.actions = {
@@ -57,7 +57,16 @@ class Player(pg.sprite.Sprite):
     self.generateEx.set_volume(0.3)
     self.generateExSound = False
     self.charge = 0
+    self.gravity = 1
+    self.on_ground = False
     self.mask = pg.mask.from_surface(self.image)
+
+  def platformCollide(self, platform1, platform2):
+    return self.mask.overlap(platform1.mask, self.offset(platform1)) or self.mask.overlap(platform2.mask, self.offset(platform2))
+
+  def apply_gravity(self):
+      self.rect.y += self.gravity
+      self.y = self.rect.y
 
   def updateAnimation(self):
     if self.death:
@@ -123,7 +132,7 @@ class Player(pg.sprite.Sprite):
   def draw(self, screen):
     pg.draw.rect(screen, (255, 0, 0), (self.rect), 2)
 
-  def update(self, screen, enemy):
+  def update(self, screen, enemy, platform1, platform2, ground):
 
     keys = pg.key.get_pressed()
 
@@ -142,16 +151,22 @@ class Player(pg.sprite.Sprite):
           self.shoot = False
         if not keys[pg.K_v] or self.index == 12:
           self.ex = False
-        
 
-        if self.jump:
-          self.rect.y -= self.speed_y
-          self.y = self.rect.y
-          self.speed_y -= 1
+        if self.on_ground:
+          if self.jump:
+            self.rect.y -= self.speed_y
+            self.y = self.rect.y
+            self.speed_y -= 1
 
-          if self.speed_y < -27:
-            self.jump = False
-            self.speed_y = 27
+            if self.speed_y < 0:
+              self.jump = False
+              self.on_ground = False
+              self.speed_y = 28
+              
+        if (not self.jump and self.on_ground) or not self.on_ground:
+          self.gravity = self.speed_y
+          self.falling = True
+          self.apply_gravity()
 
         if keys[pg.K_d]:
           self.flip = False
@@ -198,7 +213,7 @@ class Player(pg.sprite.Sprite):
           self.projectiles.add(shoot)          
           
     else:
-      self.speed_y = 27
+      self.speed_y = 28
       self.rect.y -= self.speed_y/8
       self.y = self.rect.y
 
@@ -212,7 +227,25 @@ class Player(pg.sprite.Sprite):
       
     else:
       self.hit = False
+    
+    if self.platformCollide(platform1, platform2):
+      self.on_ground = True
+      self.rect.y = platform1.y - self.image.get_height()
+      self.y = self.rect.y
+    
+    if self.y >= 600 - self.image.get_height():
+      self.on_ground = True
+      self.rect.y = ground.y - self.image.get_height()
+      self.y = self.rect.y
+    
+    if self.x < 0:
+      self.rect.x = 0
+      self.x = self.rect.x
+    
+    if self.x + self.image.get_width() > 1280:
+      self.rect.x = 1280 - self.image.get_width()
+      self.x = self.rect.x
+  
+
     for state in self.states:
       self.updateAnimation()
-
-    self.draw(screen)

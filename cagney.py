@@ -96,7 +96,7 @@ class Cagney(pg.sprite.Sprite):
     if not self.attackState:
       self.laughSound = False
       self.attackRate += 1
-      if self.attackRate >= 150:
+      if self.attackRate >= 175:
         self.attackState = True
     if self.attackState and self.index == 0:
       self.attack = random.randint(1,3)
@@ -155,5 +155,3 @@ class Cagney(pg.sprite.Sprite):
 
     self.updateAnimation()
     
-
-    self.draw(screen)
