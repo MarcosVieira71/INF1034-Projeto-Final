@@ -9,5 +9,5 @@ class Platform:
 
     def draw(self, screen):
         screen.blit(self.image, (self.x,self.y))
-        pg.draw.rect(screen, (255,0,0), self.rect, 2)
+
         

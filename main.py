@@ -53,7 +53,7 @@ def load(status, stars, time):
     enemy = Cagney(1110, 500,100, boomerang_group) 
     cagney_group.add(enemy)
     intro = True
-    jogador = Player(100, 600, 3, peashot_group) 
+    jogador = Player(10, 600, 3, peashot_group) 
     player_group.add(jogador)
     platform1 = Platform(150, 275)
     platform2 = Platform(550, 275)
@@ -85,8 +85,7 @@ def draw(screen,status):
   elif status == "playing":
     screen.blit(background, (0, 0))
     tile_map.draw(screen)
-    health = pg.image.load(f"miscellaneous/health{jogador.life}.png").convert()
-    pg.draw.rect(screen,(255,0,0), (ground),2)
+    health = pg.image.load(f"miscellaneous/health{jogador.life}.png").convert_alpha()
     cagney_group.draw(screen)
     boomerang_group.draw(screen)
     player_group.draw(screen)
@@ -113,7 +112,7 @@ def update(status):
     elif status == "playing":
       enemy.update(screen)
       boomerang_group.update()  
-      jogador.update(screen, enemy)
+      jogador.update(screen, enemy, platform1, platform2, ground)
       peashot_group.update(enemy)
 
       if intro:
