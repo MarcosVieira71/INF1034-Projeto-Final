@@ -27,7 +27,7 @@ class Player(pg.sprite.Sprite):
     self.currentAction = "idle"
     self.image = self.actions[self.currentAction][self.index]
     self.currentFrame = 0
-    self.animatedFrame = len(self.actions[self.currentAction])*2
+    self.animatedFrame = len(self.actions[self.currentAction])*4
     self.intro = True
     self.hit = False
     self.flip = False
@@ -117,7 +117,7 @@ class Player(pg.sprite.Sprite):
     if self.currentAction == "runshoot":
       self.distYplayer += 18
     return Projectile(self.rect.x + self.distXplayer,
-                      self.rect.y + self.distYplayer, 5, self.speed, type)
+                      self.rect.y + self.distYplayer, 2, self.speed, type)
 
 
   def draw(self, screen):
@@ -175,7 +175,7 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_z]:
           self.bulletLoop = False
           self.fireRate += 1
-          if self.fireRate == 5:
+          if self.fireRate >= 7.5:
             self.createBulletSound = False
             shoot = self.create_projectile("bullet")
             self.projectiles.add(shoot)

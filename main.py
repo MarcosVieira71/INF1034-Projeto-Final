@@ -1,5 +1,4 @@
 import pygame as pg
-from datetime import datetime
 from cagney import Cagney
 from player import Player
 from message import Message
@@ -28,21 +27,21 @@ def load(status, stars, time):
      menu = Menu("win", stars, time)
      menu_group.add(menu)
      pg.mixer.music.load("win/victoryTunes.mp3")
-     pg.mixer.music.set_volume(0.5)
+     pg.mixer.music.set_volume(0.3)
      pg.mixer.music.play(-1)
 
   elif status == "start":
     menu = Menu("principal", None, None)
     menu_group.add(menu)
     pg.mixer.music.load("miscellaneous/naoMexaComOCapeta.mp3")
-    pg.mixer.music.set_volume(0.5)
+    pg.mixer.music.set_volume(0.3)
     pg.mixer.music.play(-1)
 
   elif status == "tutorial":
      menu_group.remove(menu)
      menu = Menu("tutorial", None,None)
      pg.mixer.music.load("miscellaneous/naoMexaComOCapetaInstrumental.mp3")
-     pg.mixer.music.set_volume(0.5)
+     pg.mixer.music.set_volume(0.3)
      pg.mixer.music.play(-1)
      
   elif status == "playing":
@@ -51,7 +50,7 @@ def load(status, stars, time):
     tile_map = TileMap(1280, 720)
     tile_map.load_map("map/file.txt")
     tile_map.load_tiles()
-    enemy = Cagney(1110, 500, 100, boomerang_group) 
+    enemy = Cagney(1110, 500,100, boomerang_group) 
     cagney_group.add(enemy)
     intro = True
     jogador = Player(100, 600, 3, peashot_group) 
@@ -64,7 +63,7 @@ def load(status, stars, time):
     readySound = False
     youDiedSound = False 
     pg.mixer.music.load("miscellaneous/FloralFury.mp3")
-    pg.mixer.music.set_volume(0.5)
+    pg.mixer.music.set_volume(0.3)
     pg.mixer.music.play(-1)
     
 
